@@ -78,7 +78,7 @@ function initScrollReveal() {
     revealObserver.observe(element);
   });
 
-  // Active section nav link highlighting
+  // Active section nav link highlighting & URL masking
   const sectionObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
@@ -90,15 +90,47 @@ function initScrollReveal() {
             link.classList.remove('active');
           }
         });
+
+        // Dynamic URL masking
+        if (id === 'home') {
+          history.replaceState(null, null, window.location.pathname);
+        } else {
+          const cleanPath = window.location.pathname.replace(/\/$/, '') + '/' + id;
+          history.replaceState(null, null, cleanPath);
+        }
       }
     });
   }, {
-    threshold: 0.5,
+    threshold: 0.4,
     rootMargin: '-20% 0px -40% 0px'
   });
 
   sections.forEach(section => {
     sectionObserver.observe(section);
+  });
+
+  // Intercept anchor clicks for smooth scroll & clean URL rewrite
+  const allNavLinks = document.querySelectorAll('a[href^="#"]');
+  allNavLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
+      const href = link.getAttribute('href');
+      if (href.startsWith('#')) {
+        e.preventDefault();
+        const targetId = href.substring(1);
+        const targetSection = document.getElementById(targetId);
+        if (targetSection) {
+          targetSection.scrollIntoView({ behavior: 'smooth' });
+          
+          // Update URL bar immediately
+          if (targetId === 'home') {
+            history.replaceState(null, null, window.location.pathname);
+          } else {
+            const cleanPath = window.location.pathname.replace(/\/$/, '') + '/' + targetId;
+            history.replaceState(null, null, cleanPath);
+          }
+        }
+      }
+    });
   });
 }
 
