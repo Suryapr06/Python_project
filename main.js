@@ -376,3 +376,17 @@ function initThemeToggle() {
     }
   });
 }
+
+// Deter right-click inspect
+document.addEventListener('contextmenu', event => event.preventDefault());
+
+// Deter common DevTools shortcuts (F12, Ctrl+Shift+I, Ctrl+Shift+C, Ctrl+Shift+J, Ctrl+U)
+document.addEventListener('keydown', event => {
+  if (
+    event.key === 'F12' ||
+    (event.ctrlKey && event.shiftKey && ['I', 'C', 'J'].includes(event.key.toUpperCase())) ||
+    (event.ctrlKey && event.key.toUpperCase() === 'U')
+  ) {
+    event.preventDefault();
+  }
+});
