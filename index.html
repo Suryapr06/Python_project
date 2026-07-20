@@ -17,6 +17,21 @@
   
   <!-- Stylesheets -->
   <link rel="stylesheet" href="style.css">
+  <style>
+    /* Guarantee theme toggle icon visibility without stylesheet caching issues */
+    .moon-icon {
+      display: none !important;
+    }
+    .sun-icon {
+      display: block !important;
+    }
+    body.light-theme .sun-icon {
+      display: none !important;
+    }
+    body.light-theme .moon-icon {
+      display: block !important;
+    }
+  </style>
 </head>
 <body>
 
